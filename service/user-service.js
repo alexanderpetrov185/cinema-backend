@@ -46,7 +46,7 @@ class UserService {
             throw ApiError.BadRequest('email or password is incorrect')
         }
         const userDto = new UserDto(user);
-        const tokens = tokenService.generateTokens({...UserDto})
+        const tokens = tokenService.generateTokens({...userDto})
 
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return {
