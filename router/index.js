@@ -12,8 +12,13 @@ router.post("/registration", body('email').isEmail(), body('password').isLength(
 }), userController.registration);
 router.post('/login', userController.login);
 router.post('/logout', userController.logout);
+
 router.post('/createMovie', movieController.createMovie);
-router.get('/movieList', movieController.getMovies);
+router.get('/movies', movieController.getAllMovies);
+router.get('/movies/:date', movieController.getMoviesOnDate);
+router.put("/updateMovie/:id", movieController.updateMovie);
+router.delete("/deleteMovie/:id", movieController.deleteMovie);
+
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddleware, userController.getUsers);
