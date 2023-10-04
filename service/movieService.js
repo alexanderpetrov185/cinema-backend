@@ -10,7 +10,7 @@ class MovieService {
             throw ApiError.BadRequest(`This movie is already exist`)
         }
         const movie = await MoviesModel.create(data)
-        
+
         const movieDto = new MovieDto(movie)
         return {
             movie: movieDto
@@ -40,7 +40,9 @@ class MovieService {
 
     async getDateMovies(date) {
         return MoviesModel.find({
-            dates: date
+            dates: {
+                daysDates: date
+            }
         });
     }
 }
