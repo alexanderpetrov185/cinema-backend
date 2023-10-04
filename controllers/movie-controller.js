@@ -17,23 +17,23 @@ class MovieController {
         }
     }
 
-    async updateMovie(req, res, next) {
-        try {
-            const updatedMovie = await movieService.updateMovie(req.body)
-            return res.json(updatedMovie)
-        } catch (e) {
-            next(e)
-        }
-    }
-
-    async deleteMovie(req, res, next) {
-        try {
-            const deleteMovie = await movieService.deleteMovie(req.body)
-            return res.json(deleteMovie)
-        } catch (e) {
-            next(e)
-        }
-    }
+    // async updateMovie(req, res, next) {
+    //     try {
+    //         const updatedMovie = await movieService.updateMovie(req.body)
+    //         return res.json(updatedMovie)
+    //     } catch (e) {
+    //         next(e)
+    //     }
+    // }
+    //
+    // async deleteMovie(req, res, next) {
+    //     try {
+    //         const deleteMovie = await movieService.deleteMovie(req.body)
+    //         return res.json(deleteMovie)
+    //     } catch (e) {
+    //         next(e)
+    //     }
+    // }
 
     async getAllMovies(req, res, next) {
         try {

@@ -17,31 +17,37 @@ class MovieService {
         }
     }
 
-    async updateMovie(data) {
-        const updatedHotel = await MoviesModel.findByIdAndUpdate(
-            data.params.id,
-            {$set: data.body},
-            {new: true}
-        )
-        const movieDto = new MovieDto(updatedHotel)
-        return {
-            updatedHotel: movieDto
-        }
-    }
-
-    async deleteMovie(data) {
-        await MoviesModel.findByIdAndDelete(data.params.id)
-        return "movie deleted successfully"
-    }
+    // async updateMovie(data) {
+    //     const updatedHotel = await MoviesModel.findByIdAndUpdate(
+    //         data.params.id,
+    //         {$set: data.body},
+    //         {new: true}
+    //     )
+    //     const movieDto = new MovieDto(updatedHotel)
+    //     return {
+    //         updatedHotel: movieDto
+    //     }
+    // }
+    //
+    // async deleteMovie(data) {
+    //     await MoviesModel.findByIdAndDelete(data.params.id)
+    //     return "movie deleted successfully"
+    // }
 
     async getMovies() {
         return MoviesModel.find();
     }
 
     async getDateMovies(date) {
+
         return MoviesModel.find({
-            dates: {
-                daysDates: date
+            details: {
+                $elemMatch: {
+                    sessionTime: {
+                        $gte: new Date(`${date}T00:00:00.000Z`),
+                        $lt: new Date(`${date}T23:59:59.000Z`)
+                    }
+                }
             }
         });
     }
