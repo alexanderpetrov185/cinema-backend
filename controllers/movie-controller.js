@@ -5,8 +5,7 @@ class MovieController {
         try {
             const data = req.body
             if (data.dates) {
-                data.dates = await data.dates.map((date) => ISODate(date))
-                // data.dates = await data.dates.map((date) => new Date(date))
+                data.dates = await data.dates.map((date) => new Date(date))
             }
             const savedMovie = await movieService.createMovie(data)
             return res.json(savedMovie)
@@ -44,7 +43,6 @@ class MovieController {
 
     async getMoviesOnDate(req, res, next) {
         try {
-            // const date = await new Date(req.params.date)
             const movies = await movieService.getDateMovies(req.params.date)
             return res.json(movies)
         } catch (e) {
