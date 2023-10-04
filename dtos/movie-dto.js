@@ -5,7 +5,6 @@ module.exports = class MovieDto {
     genre;
     trailer;
     dates;
-    id;
 
     constructor(model) {
         this.imdbID = model.imdbID;
@@ -14,6 +13,5 @@ module.exports = class MovieDto {
         this.genre = model.genre;
         this.trailer = model.trailer;
         this.dates = model.dates;
-        this.id = model._id;
     }
 }

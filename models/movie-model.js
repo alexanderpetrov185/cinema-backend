@@ -7,11 +7,12 @@ const MovieSchema = new Schema({
     genre: {type: String, require: true},
     trailer: {type: String, require: true},
     dates: {
-        type: {
-            daysDates: [Date],
-            daySchedule: [Date]
-        }
-    }
+        type: [{
+            daysDate: Date,
+            daySchedule: [Date],
+            _id: false
+        }]
+    },
 })
 
 module.exports = model('Movie', MovieSchema);

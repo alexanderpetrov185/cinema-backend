@@ -5,8 +5,12 @@ class MovieController {
         try {
             const data = req.body
             if (data.dates) {
-                data.dates.daysDates = await data.dates.daysDates.map((date) => new Date(date))
+                await data.dates.forEach(({daysDate, daySchedule}) => {
+                    data.dates.daysDate = new Date(daysDate)
+                    data.dates.daySchedule = daySchedule.map((daysTime) => new Date(daysTime))
+                })
             }
+            console.log(data)
             const savedMovie = await movieService.createMovie(data)
             return res.json(savedMovie)
         } catch (e) {
