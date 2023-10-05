@@ -7,7 +7,7 @@ const MovieSchema = new Schema({
     genre: {type: String, require: true},
     trailer: {type: String, require: true},
     details: {
-        type: [{sessionTime: Date, accessible: Boolean, price: Number}]
+        type: [{sessionTime: Date, accessible: Boolean, price: Number, hallInfoId: String}]
     },
 })
 
