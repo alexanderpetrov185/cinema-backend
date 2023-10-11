@@ -1,14 +1,12 @@
-const {Schema, model} = require('mongoose');
+const {Schema, model, SchemaTypes} = require('mongoose');
 
 const MovieSchema = new Schema({
-    imdbID: {type: String, require: true},
+    imdbID: {type: String, unique: true, require: true},
     poster: {type: String, require: true},
     title: {type: String, require: true},
     genre: {type: String, require: true},
     trailer: {type: String, require: true},
-    details: {
-        type: [{sessionTime: Date, accessible: Boolean, price: Number, hallInfoId: String}]
-    },
+    _id: SchemaTypes.ObjectId
 })
 
 module.exports = model('Movie', MovieSchema);

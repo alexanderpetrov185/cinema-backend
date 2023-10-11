@@ -1,4 +1,4 @@
-const movieService = require("../service/movieService");
+const movieService = require("../service/movie-service");
 
 class MovieController {
     async createMovie(req, res, next) {
