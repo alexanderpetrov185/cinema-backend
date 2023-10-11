@@ -1,6 +1,8 @@
+const ScheduleModel = require("../models/schedule-model");
 const MoviesModel = require("../models/movie-model");
 const ApiError = require("../exceptions/api-error");
 const MovieDto = require("../dtos/movie-dto");
+const scheduleService = require("../service/schedule-service")
 
 class MovieService {
     async createMovie(data) {
@@ -10,24 +12,37 @@ class MovieService {
             throw ApiError.BadRequest(`This movie is already exist`)
         }
         const movie = await MoviesModel.create(data)
-
         const movieDto = new MovieDto(movie)
+
+        const movieSchedule = data.schedule && await Promise.all(data.schedule.map(async (daySchedule) => {
+                const dayExist = await ScheduleModel.findOne({day: daySchedule.day})
+                if (!dayExist) {
+                    return await scheduleService.createSchedule(movieDto.id, daySchedule)
+                } else {
+                    return await scheduleService.updateSchedule(movieDto.id, daySchedule)
+                }
+            }
+        ))
+
+
         return {
-            movie: movieDto
+            movie: movieDto,
+            movieSchedule: movieSchedule
         }
     }
 
-    // async updateMovie(data) {
-    //     const updatedHotel = await MoviesModel.findByIdAndUpdate(
-    //         data.params.id,
-    //         {$set: data.body},
-    //         {new: true}
-    //     )
-    //     const movieDto = new MovieDto(updatedHotel)
+    // async updateMovie(movieId, data) {
+    //     const movie = await MoviesModel.findByIdAndUpdate(movieId)
+    //     const movieDto = new MovieDto(movie)
+    //
+    //     const movieSchedule = data.schedule && await scheduleService.updateSchedule(movieDto.id, data.schedule)
+    //
     //     return {
-    //         updatedHotel: movieDto
+    //         movie: movieDto,
+    //         movieSchedule: movieSchedule
     //     }
     // }
+
     //
     // async deleteMovie(data) {
     //     await MoviesModel.findByIdAndDelete(data.params.id)
@@ -38,19 +53,28 @@ class MovieService {
         return MoviesModel.find();
     }
 
-    async getDateMovies(date) {
-
-        return MoviesModel.find({
-            details: {
-                $elemMatch: {
-                    sessionTime: {
-                        $gte: new Date(`${date}T00:00:00.000Z`),
-                        $lt: new Date(`${date}T23:59:59.000Z`)
-                    }
-                }
+    async scheduleOnDay(date) {
+        return ScheduleModel.find({
+            day: {
+                $gte: new Date(`${date}T00:00:00.000Z`),
+                $lt: new Date(`${date}T23:59:59.000Z`)
             }
         });
     }
+
+    // async getDateMovies(date) {
+    //
+    //     return ScheduleModel.find({
+    //         sessionsDetails: {
+    //             $elemMatch: {
+    //                 sessionTime: {
+    //                     $gte: new Date(`${date}T00:00:00.000Z`),
+    //                     $lt: new Date(`${date}T23:59:59.000Z`)
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 }
 
 module.exports = new MovieService();

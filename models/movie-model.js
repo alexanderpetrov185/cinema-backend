@@ -6,7 +6,6 @@ const MovieSchema = new Schema({
     title: {type: String, require: true},
     genre: {type: String, require: true},
     trailer: {type: String, require: true},
-    _id: SchemaTypes.ObjectId
 })
 
 module.exports = model('Movie', MovieSchema);

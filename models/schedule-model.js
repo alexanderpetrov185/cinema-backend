@@ -1,9 +1,19 @@
 const {Schema, model} = require('mongoose');
 
 const ScheduleSchema = new Schema({
-        movie: {type: Schema.ObjectId, require: true, ref: "Movie"},
-        sessionsDetails: {
-            type: [{sessionTime: Date, accessible: Boolean, price: Number, hallId: String}]
+        day: {type: Date, unique: true, require: true},
+        movies: {
+            type: [{
+                movieId: {type: Schema.ObjectId, ref: "Movie", require: true},
+                sessionsDetails: {
+                    type: [{
+                        sessionTime: Date,
+                        accessible: Boolean,
+                        price: Number,
+                        hallNumber: Number
+                    }]
+                }
+            }]
         }
     }
 )
