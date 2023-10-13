@@ -14,20 +14,20 @@ class MovieService {
         const movie = await MoviesModel.create(data)
         const movieDto = new MovieDto(movie)
 
-        const movieSchedule = data.schedule && await Promise.all(data.schedule.map(async (daySchedule) => {
-                const dayExist = await ScheduleModel.findOne({day: daySchedule.day})
-                if (!dayExist) {
-                    return await scheduleService.createSchedule(movieDto.id, daySchedule)
-                } else {
-                    return await scheduleService.updateSchedule(movieDto.id, daySchedule)
-                }
-            }
-        ))
+        // const movieSchedule = data.schedule && await Promise.all(data.schedule.map(async (daySchedule) => {
+        //         const dayExist = await ScheduleModel.findOne({day: daySchedule.day})
+        //         if (!dayExist) {
+        //             return await scheduleService.createSchedule(movieDto.id, daySchedule)
+        //         } else {
+        //             return await scheduleService.updateSchedule(movieDto.id, daySchedule)
+        //         }
+        //     }
+        // ))
 
 
         return {
             movie: movieDto,
-            movieSchedule: movieSchedule
+            // movieSchedule: movieSchedule
         }
     }
 

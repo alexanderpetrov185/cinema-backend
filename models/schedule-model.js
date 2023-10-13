@@ -8,7 +8,8 @@ const ScheduleSchema = new Schema({
                 sessionsDetails: {
                     type: [{
                         sessionTime: Date,
-                        accessible: Boolean,
+                        runtime: Number,
+                        available: Boolean,
                         price: Number,
                         hallNumber: Number
                     }]
