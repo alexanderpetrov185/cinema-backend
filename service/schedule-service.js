@@ -5,8 +5,9 @@ class ScheduleService {
     async createSchedule(data) {
         for (const movie of data.movies) {
             for (const session of movie.sessionsDetails) {
-                const sessionTimeStart = new Date(session.sessionTime);
-                const sessionTimeEnd = new Date(sessionTimeStart.setMinutes(sessionTimeStart.getMinutes() + session.runtime));
+                const sessionTimeEnd = new Date(session.sessionTime);
+                sessionTimeEnd.setMinutes(sessionTimeEnd.getMinutes() + session.runtime)
+
                 await hallModel.create(
                     {
                         hallNumber: session.hallNumber,
