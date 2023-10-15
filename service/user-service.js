@@ -79,6 +79,14 @@ class UserService {
     async getAllUsers() {
         return UserModel.find();
     }
+
+    async updateUser(userId, data) {
+        return UserModel.findByIdAndUpdate(userId, {$set: {data}})
+    }
+
+    async deleteUser(data) {
+        return UserModel.findByIdAndDelete(data.id)
+    }
 }
 
 module.exports = new UserService();

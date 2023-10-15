@@ -73,6 +73,24 @@ class UserController {
             next(e)
         }
     }
+
+    async updateUser(req, res, next) {
+        try {
+            await userService.updateUser(req.params.id, req.body)
+            return res.json("movie updated successfully")
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async deleteUser(req, res, next) {
+        try {
+            await userService.deleteUser(req.params.id)
+            return res.json("movie deleted successfully")
+        } catch (e) {
+            next(e)
+        }
+    }
 }
 
 module.exports = new UserController()

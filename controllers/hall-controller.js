@@ -10,16 +10,32 @@ class HallController {
         }
     }
 
-    // async updateHall(req, res, next) {
-    //     try {
-    //         const sessionId = req.params.sessionId;
-    //         const data = req.body
-    //         const savedHall = await hallService.updateHall(data, sessionId)
-    //         return res.json(savedHall)
-    //     } catch (e) {
-    //         next(e)
-    //     }
-    // }
+    async getHalls(req, res, next) {
+        try {
+            const savedHalls = await hallService.getHalls()
+            return res.json(savedHalls)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async updateHall(req, res, next) {
+        try {
+            await hallService.updateHall(req.params.id, req.body)
+            return res.json("hall updated successfully")
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async deleteHall(req, res, next) {
+        try {
+            await hallService.deleteHall(req.params.id)
+            return res.json("hall deleted successfully")
+        } catch (e) {
+            next(e)
+        }
+    }
 }
 
 module.exports = new HallController()

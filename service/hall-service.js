@@ -11,13 +11,18 @@ class HallService {
         return HallModel.create(data);
     }
 
-    // async updateHall(data, sessionId) {
-    //     return HallModel.findByIdAndUpdate(
-    //         sessionId,
-    //         {$set: data},
-    //         {new: true}
-    //     );
-    // }
+    async getHalls() {
+        return HallModel.find({})
+    }
+
+    async updateHall(hallId, data) {
+        return HallModel.findByIdAndUpdate(hallId, {$set: {data}})
+    }
+
+    async deleteHall(hallId) {
+        return HallModel.findByIdAndDelete(hallId)
+    }
+
 }
 
 module.exports = new HallService();
