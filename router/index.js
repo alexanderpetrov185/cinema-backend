@@ -1,7 +1,6 @@
 const {Router} = require('express');
 const userController = require("../controllers/user-controller");
 const movieController = require("../controllers/movie-controller");
-const scheduleController = require("../controllers/schedule-controller");
 const hallController = require("../controllers/hall-controller");
 const {body} = require("express-validator");
 const authMiddleware = require('../middlewares/auth-middleware')
@@ -18,10 +17,9 @@ router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddleware, userController.getUsers);
 
-router.post('/createMovie', movieController.createMovie);
 router.get('/movies', movieController.getAllMovies);
-router.get('/schedule/:date', movieController.scheduleOnDay);
-router.post('/createSchedule', scheduleController.createSchedule);
+router.get('/moviesOnDay/:date', movieController.getMoviesOnDay);
+router.post('/createMovie', movieController.createMovie);
 router.post('/createHall', hallController.createHall);
 // router.put("/updateMovie/:id", movieController.updateMovie);
 // router.delete("/deleteMovie/:id", movieController.deleteMovie);

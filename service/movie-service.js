@@ -1,8 +1,8 @@
-const ScheduleModel = require("../models/schedule-model");
 const MoviesModel = require("../models/movie-model");
+const HallModel = require("../models/hall-model");
+const SessionModel = require("../models/session-model");
 const ApiError = require("../exceptions/api-error");
 const MovieDto = require("../dtos/movie-dto");
-const scheduleService = require("../service/schedule-service")
 
 class MovieService {
     async createMovie(data) {
@@ -11,8 +11,45 @@ class MovieService {
         if (movieCandidate) {
             throw ApiError.BadRequest(`This movie is already exist`)
         }
+
+        //создаем фильм
         const movie = await MoviesModel.create(data)
         const movieDto = new MovieDto(movie)
+
+        for (const details of data.sessionsDetails) {
+            const endOfSession = new Date(details.date)
+            endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
+
+            //Добавляем временные промежутки когда зал занят
+            await HallModel.updateOne(
+                {hallNumber: details.hallNumber},
+                {
+                    $push: {
+                        reservedDates: [details.date, endOfSession]
+                    },
+                }
+            )
+
+            await SessionModel.create({hallNumber: details.hallNumber, date: details.date, movieId: movieDto.id}) //Создаем сессию
+        }
+
+
+        // await Promise.all(sessionDetails.map(async (detail) => {
+        //     const endOfSession = new Date(detail.date)
+        //     endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
+        //
+        //     //Добавляем временные промежутки когда зал занят
+        //     await HallModel.updateOne(
+        //         {hallNumber: detail.hallNumber},
+        //         {
+        //             $push: {
+        //                 reservedDates: [detail.date, endOfSession]
+        //             },
+        //         }
+        //     )
+        //
+        //     await SessionModel.create({hallNumber: detail.hallNumber, date: detail.date, movieId: movieDto.id}) //Создаем сессию
+        // }))
 
         // const movieSchedule = data.schedule && await Promise.all(data.schedule.map(async (daySchedule) => {
         //         const dayExist = await ScheduleModel.findOne({day: daySchedule.day})
@@ -24,10 +61,8 @@ class MovieService {
         //     }
         // ))
 
-
         return {
             movie: movieDto,
-            // movieSchedule: movieSchedule
         }
     }
 
@@ -53,11 +88,15 @@ class MovieService {
         return MoviesModel.find();
     }
 
-    async scheduleOnDay(date) {
-        return ScheduleModel.find({
-            day: {
-                $gte: new Date(`${date}T00:00:00.000Z`),
-                $lt: new Date(`${date}T23:59:59.000Z`)
+    async moviesOnDay(date) {
+        return MoviesModel.find({
+            sessionsDetails: {
+                $elemMatch: {
+                    date: {
+                        $gte: new Date(`${date}T00:00:00.000Z`),
+                        $lt: new Date(`${date}T23:59:59.000Z`)
+                    }
+                }
             }
         });
     }

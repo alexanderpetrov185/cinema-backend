@@ -38,9 +38,9 @@ class MovieController {
         }
     }
 
-    async scheduleOnDay(req, res, next) {
+    async getMoviesOnDay(req, res, next) {
         try {
-            const movies = await movieService.scheduleOnDay(req.params.date)
+            const movies = await movieService.moviesOnDay(req.params.date)
             return res.json(movies)
         } catch (e) {
             next(e)
