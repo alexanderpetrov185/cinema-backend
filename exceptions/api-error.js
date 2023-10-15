@@ -8,6 +8,10 @@ module.exports = class ApiError extends Error {
         this.errors = errors;
     }
 
+    static Forbidden() {
+        return new ApiError(403, 'you dont have permission to access this resource')
+    }
+
     static UnauthorizedError() {
         return new ApiError(401, 'user is unauthorized')
     }

@@ -14,12 +14,13 @@ module.exports = function (req, res, next) {
         }
 
         const userData = tokenService.validateAccessToken(accessToken);
-        if (!userData) {
-            return next(ApiError.UnauthorizedError());
-        }
 
-        req.user = userData;
-        next();
+        if (userData.id === req.params.id || userData.role === "ADMIN") {
+            req.user = userData;
+            next();
+        } else {
+            return next(ApiError.Forbidden());
+        }
     } catch (e) {
         return next(ApiError.UnauthorizedError());
     }

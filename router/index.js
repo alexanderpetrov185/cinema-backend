@@ -3,7 +3,8 @@ const userController = require("../controllers/user-controller");
 const movieController = require("../controllers/movie-controller");
 const hallController = require("../controllers/hall-controller");
 const {body} = require("express-validator");
-const authMiddleware = require('../middlewares/auth-middleware')
+const authMiddleware = require('../middlewares/auth-middleware');
+const permissionMiddleware = require('../middlewares/permission-middleware');
 
 const router = new Router();
 
@@ -16,20 +17,21 @@ router.post('/login', userController.login);
 router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
-router.get('/users', authMiddleware, userController.getUsers);
-router.put("/updateUser/:id", userController.updateUser);
-router.delete("/deleteUser/:id", userController.deleteUser);
+router.get('/users', authMiddleware, permissionMiddleware, userController.getUsers);
+router.put('/updateUser/:id', authMiddleware, userController.updateUser);
+router.delete('/deleteUser/:id', authMiddleware, permissionMiddleware, userController.deleteUser);
 
 //movieController
-router.get('/movies', movieController.getAllMovies);
-router.get('/moviesOnDay/:date', movieController.getMoviesOnDay);
-router.post('/createMovie', movieController.createMovie);
-router.put("/updateMovie/:id", movieController.updateMovie);
-router.delete("/deleteMovie/:id", movieController.deleteMovie);
+router.get('/movies', authMiddleware, permissionMiddleware, movieController.getAllMovies);
+router.get('/moviesOnDay/:date', authMiddleware, permissionMiddleware, movieController.getMoviesOnDay);
+router.post('/createMovie', authMiddleware, permissionMiddleware, movieController.createMovie);
+router.put('/updateMovie/:id', authMiddleware, permissionMiddleware, movieController.updateMovie);
+router.delete('/deleteMovie/:id', authMiddleware, permissionMiddleware, movieController.deleteMovie);
 
 //hallController
-router.post('/createHall', hallController.createHall);
-router.put("/updateHall/:id", hallController.updateHall);
-router.delete("/deleteMovie/:id", hallController.deleteHall);
+router.get('/halls', authMiddleware, permissionMiddleware, hallController.getHalls);
+router.post('/createHall', authMiddleware, permissionMiddleware, hallController.createHall);
+router.put('/updateHall/:id', authMiddleware, permissionMiddleware, hallController.updateHall);
+router.delete('/deleteMovie/:id', authMiddleware, permissionMiddleware, hallController.deleteHall);
 
 module.exports = router
