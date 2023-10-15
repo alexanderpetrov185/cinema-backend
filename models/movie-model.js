@@ -1,4 +1,4 @@
-const {Schema, model, SchemaTypes} = require('mongoose');
+const {Schema, model} = require('mongoose');
 
 const MovieSchema = new Schema({
     imdbID: {type: String, unique: true, require: true},
