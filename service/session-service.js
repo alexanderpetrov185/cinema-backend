@@ -19,7 +19,7 @@ class SessionService {
     }
 
     async updateSession(sessionId, data) {
-        return SessionModel.findByIdAndUpdate(sessionId, {$set: {data}})
+        return SessionModel.findByIdAndUpdate(sessionId, {$set: {"seatsInfo.$[el].available": data.available}}, {arrayFilters: [{'el._id': data.seatId}]})
     }
 
     async deleteSession(sessionId) {
