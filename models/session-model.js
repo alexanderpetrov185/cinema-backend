@@ -24,7 +24,7 @@ const SessionSchema = new Schema({
             },
             require: true
         },
-        date: {type: Date, require: true},
+        sessionTime: {type: [Date], require: true},
         movieId: {type: Schema.ObjectId, require: true}
     }
 )

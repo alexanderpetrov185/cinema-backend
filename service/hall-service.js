@@ -19,6 +19,20 @@ class HallService {
         return HallModel.findByIdAndUpdate(hallId, {$set: {data}})
     }
 
+    async updateHallAvailability(hallNumber, sessionTime, sessionId) {
+        return HallModel.updateOne(
+            {hallNumber: hallNumber},
+            {
+                $push: {
+                    reservedSessions: [{
+                        sessionTime: sessionTime,
+                        sessionId: sessionId
+                    }]
+                },
+            }
+        );
+    }
+
     async deleteHall(hallId) {
         return HallModel.findByIdAndDelete(hallId)
     }

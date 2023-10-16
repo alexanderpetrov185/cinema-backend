@@ -1,8 +1,8 @@
 const MoviesModel = require("../models/movie-model");
-const HallModel = require("../models/hall-model");
-const SessionModel = require("../models/session-model");
 const ApiError = require("../exceptions/api-error");
 const MovieDto = require("../dtos/movie-dto");
+const sessionService = require('../service/session-service')
+const hallService = require('../service/hall-service')
 
 class MovieService {
     async createMovie(data) {
@@ -17,30 +17,20 @@ class MovieService {
         const movieDto = new MovieDto(movie)
 
         for (const details of data.sessionsDetails) {
+            const startOfSession = new Date(details.date)
             const endOfSession = new Date(details.date)
             endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
+            const sessionTime = [startOfSession, endOfSession]
+
 
             //Создаем сессию
-            const session = await SessionModel.create({
-                hallNumber: details.hallNumber,
-                date: details.date,
-                movieId: movieDto.id
-            })
+            const session = await sessionService.createSession(details.hallNumber, sessionTime, movieDto.id)
 
             //!!! ДОБАВИТЬ ПРОВЕРКУ НА СУЩЕСТВОВАНИЕ ЗАЛА НА СТОРОНЕ ФРОНТА
 
-            //Добавляем временные промежутки когда зал занят
-            await HallModel.updateOne(
-                {hallNumber: details.hallNumber},
-                {
-                    $push: {
-                        reservedSessions: [{
-                            sessionTime: [details.date, endOfSession],
-                            sessionId: session._id
-                        }]
-                    },
-                }
-            )
+            //Обновляем значения когда зал занят
+            await hallService.updateHallAvailability(details.hallNumber, sessionTime, session._id)
+
         }
 
         return {
