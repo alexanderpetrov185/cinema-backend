@@ -18,12 +18,13 @@ router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddleware, permissionMiddleware, userController.getUsers);
+router.get('/user/:id', authMiddleware, userController.getUser);
 router.put('/updateUser/:id', authMiddleware, userController.updateUser);
 router.delete('/deleteUser/:id', authMiddleware, permissionMiddleware, userController.deleteUser);
 
 //movieController
-router.get('/movies', authMiddleware, permissionMiddleware, movieController.getAllMovies);
-router.get('/moviesOnDay/:date', authMiddleware, permissionMiddleware, movieController.getMoviesOnDay);
+router.get('/movies', movieController.getAllMovies);
+router.get('/moviesOnDay/:date', movieController.getMoviesOnDay);
 router.post('/createMovie', authMiddleware, permissionMiddleware, movieController.createMovie);
 router.put('/updateMovie/:id', authMiddleware, permissionMiddleware, movieController.updateMovie);
 router.delete('/deleteMovie/:id', authMiddleware, permissionMiddleware, movieController.deleteMovie);

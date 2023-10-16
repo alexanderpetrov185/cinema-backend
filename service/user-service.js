@@ -80,6 +80,10 @@ class UserService {
         return UserModel.find();
     }
 
+    async getUser(userId) {
+        return UserModel.findById(userId);
+    }
+
     async updateUser(userId, data) {
         return UserModel.findByIdAndUpdate(userId, {$set: {data}})
     }

@@ -20,6 +20,10 @@ class MovieService {
             const endOfSession = new Date(details.date)
             endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
 
+            const hallExist = await HallModel.findOne({hallNumber: details.hallNumber})
+
+            //!!! ДОБАВИТЬ ПРОВЕРКУ НА СУЩЕСТВОВАНИЕ ЗАЛА НА СТОРОНЕ ФРОНТА
+
             //Добавляем временные промежутки когда зал занят
             await HallModel.updateOne(
                 {hallNumber: details.hallNumber},
