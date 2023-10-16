@@ -19,12 +19,13 @@ class MovieService {
         for (const details of data.sessionsDetails) {
             const endOfSession = new Date(details.date)
             endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
-            
+
+            //Создаем сессию
             const session = await SessionModel.create({
                 hallNumber: details.hallNumber,
                 date: details.date,
                 movieId: movieDto.id
-            }) //Создаем сессию
+            })
 
             //!!! ДОБАВИТЬ ПРОВЕРКУ НА СУЩЕСТВОВАНИЕ ЗАЛА НА СТОРОНЕ ФРОНТА
 

@@ -2,6 +2,7 @@ const {Router} = require('express');
 const userController = require("../controllers/user-controller");
 const movieController = require("../controllers/movie-controller");
 const hallController = require("../controllers/hall-controller");
+const sessionController = require("../controllers/session-controller");
 const {body} = require("express-validator");
 const authMiddleware = require('../middlewares/auth-middleware');
 const permissionMiddleware = require('../middlewares/permission-middleware');
@@ -33,6 +34,12 @@ router.delete('/deleteMovie/:id', authMiddleware, permissionMiddleware, movieCon
 router.get('/halls', authMiddleware, permissionMiddleware, hallController.getHalls);
 router.post('/createHall', authMiddleware, permissionMiddleware, hallController.createHall);
 router.put('/updateHall/:id', authMiddleware, permissionMiddleware, hallController.updateHall);
-router.delete('/deleteMovie/:id', authMiddleware, permissionMiddleware, hallController.deleteHall);
+router.delete('/deleteHall/:id', authMiddleware, permissionMiddleware, hallController.deleteHall);
+
+//sessionController
+router.get('/session', sessionController.getHalls);
+router.post('/createSession', authMiddleware, permissionMiddleware, sessionController.createHall);
+router.put('/updateSession/:id', sessionController.updateHall);
+router.delete('/deleteSession/:id', authMiddleware, permissionMiddleware, sessionController.deleteHall);
 
 module.exports = router
