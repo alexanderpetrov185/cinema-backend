@@ -19,8 +19,12 @@ class MovieService {
         for (const details of data.sessionsDetails) {
             const endOfSession = new Date(details.date)
             endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
-
-            const hallExist = await HallModel.findOne({hallNumber: details.hallNumber})
+            
+            const session = await SessionModel.create({
+                hallNumber: details.hallNumber,
+                date: details.date,
+                movieId: movieDto.id
+            }) //Создаем сессию
 
             //!!! ДОБАВИТЬ ПРОВЕРКУ НА СУЩЕСТВОВАНИЕ ЗАЛА НА СТОРОНЕ ФРОНТА
 
@@ -29,12 +33,13 @@ class MovieService {
                 {hallNumber: details.hallNumber},
                 {
                     $push: {
-                        reservedDates: [details.date, endOfSession]
+                        reservedSessions: [{
+                            sessionTime: [details.date, endOfSession],
+                            sessionId: session._id
+                        }]
                     },
                 }
             )
-
-            await SessionModel.create({hallNumber: details.hallNumber, date: details.date, movieId: movieDto.id}) //Создаем сессию
         }
 
         return {
