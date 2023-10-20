@@ -43,17 +43,42 @@ class MovieService {
     }
 
     async moviesOnDay(date) {
-        return MoviesModel.find({
-            sessionsDetails: {
-                $elemMatch: {
-                    date: {
-                        $gte: new Date(`${date}T00:00:00.000Z`),
-                        $lt: new Date(`${date}T23:59:59.000Z`)
+        const gte = new Date(`${date}T00:00:00.000Z`)
+        const lt = new Date(`${date}T23:59:59.000Z`)
+
+        return MoviesModel.aggregate([{
+            $project: {
+                imdbID: 1, poster: 1, title: 1, genre: 1, trailer: 1, runtime: 1,
+                sessionsDetails: {
+                    $filter: {
+                        input: "$sessionsDetails",
+                        as: "detail",
+                        cond: {
+                            $and: [
+                                {$gte: ["$$detail.date", gte]},
+                                {$lt: ["$$detail.date", lt]}
+                            ]
+                        }
                     }
                 }
             }
-        });
+        }]);
+
+        // return MoviesModel.aggregate([{$unwind: "$sessionsDetails"}]);
     }
+
+    // async moviesOnDay(date) {
+    //     return MoviesModel.find({
+    //         sessionsDetails: {
+    //             $elemMatch: {
+    //                 date: {
+    //                     $gte: new Date(`${date}T00:00:00.000Z`),
+    //                     $lt: new Date(`${date}T23:59:59.000Z`)
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
     async updateMovie(movieId, data) {
         return MoviesModel.findByIdAndUpdate(movieId, {$set: {data}})
