@@ -6,32 +6,35 @@ const hallService = require('../service/hall-service')
 
 class MovieService {
     async createMovie(data) {
-        const imdbID = data.imdbID
+        const movieData = data
+        const imdbID = movieData.imdbID
         const movieCandidate = await MoviesModel.findOne({imdbID})
         if (movieCandidate) {
             throw ApiError.BadRequest(`This movie is already exist`)
         }
 
-        //создаем фильм
-        const movie = await MoviesModel.create(data)
-        const movieDto = new MovieDto(movie)
-
-        for (const details of data.sessionsDetails) {
+        movieData.sessionsDetails = await Promise.all(movieData.sessionsDetails.map(async (details) => {
             const startOfSession = new Date(details.date)
             const endOfSession = new Date(details.date)
-            endOfSession.setMinutes(endOfSession.getMinutes() + data.runtime + 10) //10 минут уборка зала
+            endOfSession.setMinutes(endOfSession.getMinutes() + movieData.runtime + 10) //10 минут уборка зала
             const sessionTime = [startOfSession, endOfSession]
 
-
             //Создаем сессию
-            const session = await sessionService.createSession(details.hallNumber, sessionTime, movieDto.id)
+            const session = await sessionService.createSession(details.hallNumber, startOfSession)
 
             //!!! ДОБАВИТЬ ПРОВЕРКУ НА СУЩЕСТВОВАНИЕ ЗАЛА НА СТОРОНЕ ФРОНТА
 
             //Обновляем значения когда зал занят
             await hallService.updateHallAvailability(details.hallNumber, sessionTime, session._id)
+            details.sessionId = session._id
+            return details
+        }))
 
-        }
+        console.log(movieData)
+
+        //создаем фильм
+        const movie = await MoviesModel.create(movieData)
+        const movieDto = new MovieDto(movie)
 
         return {
             movie: movieDto,

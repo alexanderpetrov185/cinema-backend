@@ -12,6 +12,7 @@ const MovieSchema = new Schema({
             hallNumber: {type: Number, require: true},
             date: {type: Date, require: true},
             price: {type: Number, require: true},
+            sessionId: {type: Schema.ObjectId, require: true}
         }]
     }
 })
