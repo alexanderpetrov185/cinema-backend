@@ -30,8 +30,6 @@ class MovieService {
             return details
         }))
 
-        console.log(movieData)
-
         //создаем фильм
         const movie = await MoviesModel.create(movieData)
         const movieDto = new MovieDto(movie)
@@ -51,11 +49,6 @@ class MovieService {
 
         return MoviesModel.aggregate([
             {
-                $match: {
-                    $and: [{"sessionsDetails.date": {$gte: gte}}, {"sessionsDetails.date": {$lt: lt}}]
-                }
-            },
-            {
                 $project: {
                     imdbID: 1, poster: 1, title: 1, genre: 1, trailer: 1, runtime: 1,
                     sessionsDetails: {
@@ -71,8 +64,40 @@ class MovieService {
                         }
                     }
                 }
-            }]);
+            },
+            {
+                $match: {
+                    "sessionsDetails": {$ne: []}
+                }
+            }
+        ]);
+
+        // return MoviesModel.aggregate([
+        //     {
+        //         $match: {
+        //             $and: [{"sessionsDetails.date": {$gte: gte}}, {"sessionsDetails.date": {$lt: lt}}]
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             imdbID: 1, poster: 1, title: 1, genre: 1, trailer: 1, runtime: 1,
+        //             sessionsDetails: {
+        //                 $filter: {
+        //                     input: "$sessionsDetails",
+        //                     as: "detail",
+        //                     cond: {
+        //                         $and: [
+        //                             {$gte: ["$$detail.date", gte]},
+        //                             {$lt: ["$$detail.date", lt]}
+        //                         ]
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // ]);
     }
+
 
     async updateMovie(movieId, data) {
         return MoviesModel.findByIdAndUpdate(movieId, {$set: {data}})
