@@ -66,6 +66,19 @@ class MovieService {
                 }
             },
             {
+                $project:
+                    {
+                        imdbID: 1, poster: 1, title: 1, genre: 1, trailer: 1, runtime: 1,
+                        sessionsDetails: {
+                            $sortArray:
+                                {
+                                    input: "$sessionsDetails",
+                                    sortBy: {"date": 1}
+                                }
+                        }
+                    }
+            },
+            {
                 $match: {
                     "sessionsDetails": {$ne: []}
                 }
