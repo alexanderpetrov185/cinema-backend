@@ -71,31 +71,6 @@ class MovieService {
                 }
             }
         ]);
-
-        // return MoviesModel.aggregate([
-        //     {
-        //         $match: {
-        //             $and: [{"sessionsDetails.date": {$gte: gte}}, {"sessionsDetails.date": {$lt: lt}}]
-        //         }
-        //     },
-        //     {
-        //         $project: {
-        //             imdbID: 1, poster: 1, title: 1, genre: 1, trailer: 1, runtime: 1,
-        //             sessionsDetails: {
-        //                 $filter: {
-        //                     input: "$sessionsDetails",
-        //                     as: "detail",
-        //                     cond: {
-        //                         $and: [
-        //                             {$gte: ["$$detail.date", gte]},
-        //                             {$lt: ["$$detail.date", lt]}
-        //                         ]
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // ]);
     }
 
 

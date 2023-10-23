@@ -37,7 +37,7 @@ router.put('/updateHall/:id', authMiddleware, permissionMiddleware, hallControll
 router.delete('/deleteHall/:id', authMiddleware, permissionMiddleware, hallController.deleteHall);
 
 //sessionController
-router.get('/session', sessionController.getSession);
+router.get('/session/:id', sessionController.getSession);
 router.post('/createSession', authMiddleware, permissionMiddleware, sessionController.createSession);
 router.put('/updateSession/:id', sessionController.updateSession);
 router.delete('/deleteSession/:id', authMiddleware, permissionMiddleware, sessionController.deleteSession);
