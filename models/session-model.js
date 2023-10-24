@@ -6,7 +6,7 @@ const SessionSchema = new Schema({
         seatsInfo: {
             type: [{position: String, available: Boolean}],
             default: function () {
-                if (this.hallNumber === 1) {
+                if (this.hallNumber === "1") {
                     return hallOne.map((seat) => {
                         return {
                             position: seat,
@@ -25,6 +25,7 @@ const SessionSchema = new Schema({
             require: true
         },
         sessionTime: {type: [Date], require: true},
+        sessionPrice: {type: Number, require: true}
     }
 )
 

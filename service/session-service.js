@@ -2,16 +2,17 @@ const SessionModel = require("../models/session-model");
 const ApiError = require("../exceptions/api-error");
 
 class SessionService {
-    async createSession(hallNumber, sessionTime, movieId) {
+    async createSession(hallNumber, sessionTime, price) {
         const sessionCandidate = await SessionModel.findOne({
             hallNumber: hallNumber,
-            sessionTime: sessionTime
+            sessionTime: sessionTime,
+            price: price
         })
 
         if (sessionCandidate) {
             throw ApiError.BadRequest(`Hall №${hallNumber} for this date ${sessionTime} is already reserved`)
         }
-        return SessionModel.create({hallNumber, sessionTime, movieId});
+        return SessionModel.create({hallNumber, sessionTime, price});
     }
 
     async getSession(sessionId) {

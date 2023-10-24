@@ -20,7 +20,7 @@ class MovieService {
             const sessionTime = [startOfSession, endOfSession]
 
             //Создаем сессию
-            const session = await sessionService.createSession(details.hallNumber, startOfSession)
+            const session = await sessionService.createSession(details.hallNumber, startOfSession, details.price)
 
             //!!! ДОБАВИТЬ ПРОВЕРКУ НА СУЩЕСТВОВАНИЕ ЗАЛА НА СТОРОНЕ ФРОНТА
 
@@ -44,8 +44,8 @@ class MovieService {
     }
 
     async moviesOnDay(date) {
-        const gte = new Date(`${date}T00:00:00.000Z`)
-        const lt = new Date(`${date}T23:59:59.000Z`)
+        const gte = new Date(`${date}T00:00:00`)
+        const lt = new Date(`${date}T23:59:59`)
 
         return MoviesModel.aggregate([
             {
