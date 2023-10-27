@@ -19,8 +19,22 @@ class SessionService {
         return SessionModel.findById(sessionId)
     }
 
-    async updateSession(sessionId, data) {
-        return SessionModel.findByIdAndUpdate(sessionId, {$set: {"seatsInfo.$[el].available": data.available}}, {arrayFilters: [{'el._id': data.seatId}]})
+    async updateSeats({seatsIds}) {
+        return SessionModel.updateMany(
+            {
+                "seatsInfo._id": {
+                    $in: seatsIds
+                }
+            },
+            {$set: {"seatsInfo.$[element].available": false}},
+            {
+                "arrayFilters": [{
+                    "element._id": {
+                        $in: seatsIds
+                    }
+                }], "multi": true
+            },
+        );
     }
 
     async deleteSession(sessionId) {
@@ -30,3 +44,13 @@ class SessionService {
 }
 
 module.exports = new SessionService();
+
+
+// ,
+// {
+//     "arrayFilters": [{
+//     "elem._id": {
+//         $in: seatsId
+//     }
+// }], "multi": true
+// }
