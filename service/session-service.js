@@ -19,9 +19,10 @@ class SessionService {
         return SessionModel.findById(sessionId)
     }
 
-    async updateSeats({seatsIds}) {
+    async updateSeats(sessionId, {seatsIds}) {
         return SessionModel.updateMany(
             {
+                _id: sessionId,
                 "seatsInfo._id": {
                     $in: seatsIds
                 }

@@ -21,7 +21,7 @@ class SessionController {
 
     async updateSeats(req, res, next) {
         try {
-            await sessionService.updateSeats(req.body)
+            await sessionService.updateSeats(req.params.id, req.body)
             return res.json("session updated successfully")
         } catch (e) {
             next(e)
