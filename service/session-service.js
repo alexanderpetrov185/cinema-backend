@@ -45,13 +45,3 @@ class SessionService {
 }
 
 module.exports = new SessionService();
-
-
-// ,
-// {
-//     "arrayFilters": [{
-//     "elem._id": {
-//         $in: seatsId
-//     }
-// }], "multi": true
-// }

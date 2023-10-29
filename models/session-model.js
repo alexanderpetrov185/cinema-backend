@@ -1,5 +1,5 @@
 const {Schema, model} = require('mongoose');
-const {hallOne, hallTwo} = require('../hallsSeatsSimilarity')
+const {hallOne, hallTwo} = require('../hallsSeatsSchema')
 
 const SessionSchema = new Schema({
         hallNumber: {type: String, require: true},
