@@ -58,7 +58,6 @@ class MovieService {
   async moviesOnDay(date) {
     const gte = new Date(`${date}T00:00:00.000Z`);
     const lt = new Date(`${date}T23:59:59.000Z`);
-    console.log("gte:", gte, "lt: ", lt);
 
     return MoviesModel.aggregate([
       {
