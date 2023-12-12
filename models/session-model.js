@@ -24,7 +24,7 @@ const SessionSchema = new Schema({
             },
             require: true
         },
-        sessionTime: {type: [Date], require: true},
+        sessionTime: {type: Date, require: true},
         price: {type: Number, require: true}
     }
 )
